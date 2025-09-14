@@ -1,0 +1,34 @@
+@media (max-width: 600px) {
+  .responsive-stepper {
+    display: block;
+  }
+
+  .responsive-stepper .mat-horizontal-stepper-header-container {
+    display: none !important; // esconde header horizontal
+  }
+
+  .responsive-stepper .mat-vertical-stepper-header {
+    font-size: 14px;
+  }
+  
+}
+
+.card {
+  margin: 24px auto;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.full {
+  width: 100%;
+}
+
+.buttons {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.address-type {
+  margin-bottom: 12px;
+}

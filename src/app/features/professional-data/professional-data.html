@@ -1,0 +1,28 @@
+<div [formGroup]="form">
+    <mat-form-field appearance="outline" class="full">
+        <mat-label>Profissão</mat-label>
+@if (profissoes$ | async; as profissoes) {
+  <mat-select formControlName="profissao">
+    @for (p of profissoes; track $index) {
+      <mat-option [value]="p">{{ p }}</mat-option>
+    }
+  </mat-select>
+}
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+        <mat-label>Empresa</mat-label>
+        <input matInput formControlName="empresa" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+        <mat-label>Salário</mat-label>
+        <input matInput formControlName="salario" mask="separator.2" thousandSeparator="." decimalMarker="," />
+    </mat-form-field>
+</div>
+
+<div class="buttons">
+    <button mat-button matStepperPrevious>Voltar</button>
+    <button mat-button (click)="finishSaveProfessional(); stepper.next()"
+        [disabled]="form.get('profissional')?.invalid">Finalizar</button>
+</div>

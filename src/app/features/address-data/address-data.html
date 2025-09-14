@@ -1,0 +1,32 @@
+<div [formGroup]="form">
+    <mat-form-field appearance="outline" class="full">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="cep" mask="00000-000" placeholder="00000-000" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+        <mat-label>Endereço</mat-label>
+        <input matInput formControlName="rua" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Bairro</mat-label>
+        <input matInput formControlName="bairro" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Cidade</mat-label>
+        <input matInput formControlName="cidade" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <input matInput formControlName="estado" />
+    </mat-form-field>
+</div>
+
+<div class="buttons">
+    <button mat-button matStepperPrevious>Voltar</button>
+    <button mat-button matStepperNext (click)="nextStepSaveResidencial()"
+        [disabled]="form.invalid">Próximo</button>
+</div>
