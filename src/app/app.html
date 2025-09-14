@@ -1,32 +1,47 @@
 <mat-card class="card">
-  <mat-horizontal-stepper linear class="responsive-stepper" [orientation]="(isHandset$ | async) ? 'vertical' : 'horizontal'" #stepper>
+  <mat-horizontal-stepper linear class="responsive-stepper"
+    [orientation]="(isHandset$ | async) ? 'vertical' : 'horizontal'" #stepper>
 
-    <mat-step [completed]="isPersonalComplete()">
+    <mat-step [stepControl]="personal">
       <ng-template matStepLabel>Dados Pessoais</ng-template>
-      <app-personal-data></app-personal-data>
+      <app-personal-data [parentForm]="personal"></app-personal-data>
+      <div class="buttons">
+        <button mat-button matStepperNext (click)="nextStepSavePersonal()" [disabled]="form.get('personal')?.invalid">
+          Próximo
+        </button>
+      </div>
     </mat-step>
 
-    <mat-step [completed]="isAddressComplete()">
+    <mat-step [stepControl]="address">
       <ng-template matStepLabel>Endereço</ng-template>
-      <app-address-data></app-address-data>
-      <!-- <div>
+      <app-address-data [parentForm]="address"></app-address-data>
+      <div class="buttons">
         <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-button matStepperNext>Próximo</button>
-      </div> -->
+        <button mat-button matStepperNext (click)="nextStepSaveResidencial()"
+          [disabled]="form.get('address')?.invalid">Próximo</button>
+      </div>
     </mat-step>
 
-    <mat-step>
+    <mat-step [stepControl]="professional">
       <ng-template matStepLabel>Profissão</ng-template>
-      <app-professional-data></app-professional-data>
-      <!-- <div>
+      <app-professional-data [parentForm]="professional" [profissoes]="profissoes$ | async"></app-professional-data>
+      <div class="buttons">
         <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-button matStepperNext>Resumo</button>
-      </div> -->
+        <button mat-button (click)="finishSaveProfessional(); stepper.next()"
+          [disabled]="form.get('profissional')?.invalid">Finalizar</button>
+      </div>
     </mat-step>
 
-    <mat-step>
-      <ng-template matStepLabel>Resumo</ng-template>
-      <app-summary></app-summary>
-    </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Resumo</ng-template>
+        <div class="resumo">
+          <h3>Resumo</h3>
+          <pre>{{ store.data() | json }}</pre>
+          <div class="buttons">
+            <button mat-button matStepperPrevious>Voltar</button>
+            <button mat-flat-button color="primary" (click)="exportPdf()">Exportar PDF</button>
+          </div>
+        </div>
+      </mat-step>
   </mat-horizontal-stepper>
 </mat-card>

@@ -1,10 +1,10 @@
-<form [formGroup]="form">
-  <div formGroupName="personal">
-    <mat-form-field appearance="outline" class="full">
-      <mat-label>Nome completo</mat-label>
-      <input matInput formControlName="nome" />
-    </mat-form-field>
+<div [formGroup]="parentForm">
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Nome completo</mat-label>
+    <input matInput formControlName="nome" />
+  </mat-form-field>
 
+  <div class="row">
     <mat-form-field appearance="outline">
       <mat-label>Data de nascimento</mat-label>
       <input matInput formControlName="nascimento" mask="00/00/0000" placeholder="dd/mm/aaaa" />
@@ -20,10 +20,4 @@
       <input matInput formControlName="telefone" mask="(00) 00000-0000" />
     </mat-form-field>
   </div>
-
-  <div class="buttons">
-    <button mat-button matStepperNext (click)="nextStepSavePersonal()" [disabled]="form.get('personal')?.invalid">
-      Próximo
-    </button>
-  </div>
-</form>
+</div>

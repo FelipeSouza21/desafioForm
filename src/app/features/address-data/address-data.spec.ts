@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddressData } from './address-data';
+import { AddressDataComponent } from './address-data';
 
 describe('AddressData', () => {
-  let component: AddressData;
-  let fixture: ComponentFixture<AddressData>;
+  let component: AddressDataComponent;
+  let fixture: ComponentFixture<AddressDataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddressData]
+      imports: [AddressDataComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddressData);
+    fixture = TestBed.createComponent(AddressDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
