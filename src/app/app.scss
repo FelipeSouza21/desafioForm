@@ -1,4 +1,4 @@
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .responsive-stepper {
     display: block;
   }
@@ -11,6 +11,12 @@
     font-size: 14px;
   }
   
+}
+
+@media (min-width: 801px) {
+  .card {
+    max-width: 80%;
+  }
 }
 
 .card {

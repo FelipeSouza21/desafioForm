@@ -11,9 +11,6 @@ mat-form-field.full {
 
 .row {
     display: flex;
-    gap: 16px;
-
-    .flex {
-        flex: 1;
-    }
+    gap: 1rem;
+    flex-wrap: wrap;
 }

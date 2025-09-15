@@ -14,6 +14,7 @@ import { FormStore } from './core/services/form-state';
 import { CepService } from './core/services/cep';
 import { ProfessionsService } from './core/services/professions';
 import jsPDF from 'jspdf';
+import { cpfValidator } from './shared/validators/cpf.validator';
 
 @Component({
   selector: 'app-root',
@@ -56,7 +57,7 @@ export class App implements OnInit {
       personal: this.fb.group({
         nome: ['', Validators.required],
         nascimento: ['', Validators.required],
-        cpf: ['', Validators.required],
+        cpf: ['', [cpfValidator()]],
         telefone: ['', Validators.required]
       }),
       address: this.fb.group({
@@ -83,7 +84,6 @@ export class App implements OnInit {
       filter((v: string) => v.length === 8)
     ).subscribe((cep: string) => {
       this.cepService.lookup(cep).subscribe(res => {
-        console.log('CEP lookup result:', res);
         this.form.patchValue({
           address: res
         });
@@ -120,35 +120,25 @@ export class App implements OnInit {
     this.store.updateProfessional(this.professional.value);
   }
 
-  exportPdf() {
-    const data = this.store.data();
-    const doc = new jsPDF();
-    doc.setFontSize(12);
-    doc.text('Resumo do Formulário', 10, 10);
-    let y = 20;
-    const push = (label: string, value: any) => {
-      doc.text(`${label}: ${value || '-'}`, 10, y);
-      y += 8;
-    };
+exportPdf() {
+  const { personal, address, professional } = this.store.data();
+  const doc = new jsPDF();
+  doc.setFontSize(12);
+  
+  const lines = [
+    'Resumo do Formulário',
+    `Nome: ${personal.nome || '-'}`, `Nascimento: ${personal.nascimento || '-'}`,
+    `CPF: ${personal.cpf || '-'}`, `Telefone: ${personal.telefone || '-'}`, '',
+    `CEP: ${address.cep || '-'}`, `Endereço: ${address.rua || '-'}`,
+    `Bairro: ${address.bairro || '-'}`, `Cidade: ${address.cidade || '-'}`, `Estado: ${address.estado || '-'}`, '',
+    `Profissão: ${professional.profissao || '-'}`, `Empresa: ${professional.empresa || '-'}`, `Salário: ${professional.salario || '-'}`
+  ];
 
-    push('Nome', data.personal.nome);
-    push('Nascimento', data.personal.nascimento);
-    push('CPF', data.personal.cpf);
-    push('Telefone', data.personal.telefone);
+  lines.forEach((line, i) => 
+    line && doc.text(line, 10, i === 0 ? 10 : 20 + (i - 1) * 8)
+  );
 
-    y += 4;
-    push('CEP', data.address.cep);
-    push('Endereço', data.address.rua);
-    push('Bairro', data.address.bairro);
-    push('Cidade', data.address.cidade);
-    push('Estado', data.address.estado);
-
-    y += 4;
-    push('Profissão', data.professional.profissao);
-    push('Empresa', data.professional.empresa);
-    push('Salário', data.professional.salario);
-
-    doc.save('resumo.pdf');
-  }
+  doc.save('resumo.pdf');
+}
 
 }
