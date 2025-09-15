@@ -32,16 +32,50 @@
       </div>
     </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel>Resumo</ng-template>
-        <div class="resumo">
-          <h3>Resumo</h3>
-          <pre>{{ store.data() | json }}</pre>
-          <div class="buttons">
-            <button mat-button matStepperPrevious>Voltar</button>
-            <button mat-flat-button color="primary" (click)="exportPdf()">Exportar PDF</button>
-          </div>
+    <mat-step>
+      <ng-template matStepLabel>Resumo</ng-template>
+      <div class="resumo">
+        <mat-card class="resumo-card">
+          <mat-card-header>
+            <mat-card-title>Resumo</mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+            @if (store.data(); as data) {
+            <h4>Dados Pessoais</h4>
+            <mat-list>
+              <mat-list-item><strong>Nome:</strong> {{ data.personal.nome }}</mat-list-item>
+              <mat-list-item><strong>Telefone:</strong> {{ data.personal.telefone }}</mat-list-item>
+              <mat-list-item><strong>Data de nascimento:</strong> {{ data.personal.nascimento | date:'dd/MM/yyyy':'':'pt-BR'}}</mat-list-item>
+              <mat-list-item><strong>CPF:</strong> {{ data.personal.cpf }}</mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <h4>Endereço</h4>
+            <mat-list>
+              <mat-list-item><strong>CEP:</strong> {{ data.address.cep }}</mat-list-item>
+              <mat-list-item><strong>Endereço:</strong> {{ data.address.rua }}</mat-list-item>
+              <mat-list-item><strong>Bairro:</strong> {{ data.address.bairro }}</mat-list-item>
+              <mat-list-item><strong>Cidade:</strong> {{ data.address.cidade }}</mat-list-item>
+              <mat-list-item><strong>Estado:</strong> {{ data.address.estado }}</mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <h4>Profissional</h4>
+            <mat-list>
+              <mat-list-item><strong>Profissão:</strong> {{ data.professional.profissao }}</mat-list-item>
+              <mat-list-item><strong>Empresa:</strong> {{ data.professional.empresa }}</mat-list-item>
+              <mat-list-item><strong>Salário:</strong> {{ data.professional.salario | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</mat-list-item>
+            </mat-list>
+
+            } @else {
+            <p>Nenhum dado preenchido ainda.</p>
+            }
+          </mat-card-content>
+        </mat-card>
+        <div class="buttons">
+          <button mat-button matStepperPrevious>Voltar</button>
+          <button mat-flat-button color="primary" (click)="exportPdf()">Exportar PDF</button>
         </div>
-      </mat-step>
+      </div>
+    </mat-step>
   </mat-horizontal-stepper>
 </mat-card>

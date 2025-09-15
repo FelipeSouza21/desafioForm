@@ -9,12 +9,13 @@ import { PersonalDataComponent } from './features/personal-data/personal-data';
 import { AddressDataComponent } from './features/address-data/address-data';
 import { Observable, debounceTime, distinctUntilChanged, filter, map, of, shareReplay, startWith } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormStore } from './core/services/form-state';
 import { CepService } from './core/services/cep';
 import { ProfessionsService } from './core/services/professions';
 import jsPDF from 'jspdf';
 import { cpfValidator } from './shared/validators/cpf.validator';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-root',
@@ -22,9 +23,11 @@ import { cpfValidator } from './shared/validators/cpf.validator';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatListModule,
     ReactiveFormsModule,
     AsyncPipe,
-    JsonPipe,
+    DatePipe,
+    CurrencyPipe,
     PersonalDataComponent,
     AddressDataComponent,
     ProfessionalDataComponent,
