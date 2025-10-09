@@ -2,35 +2,40 @@
   <mat-horizontal-stepper linear class="responsive-stepper"
     [orientation]="(isHandset$ | async) ? 'vertical' : 'horizontal'" #stepper>
 
-    <mat-step [stepControl]="personal">
-      <ng-template matStepLabel>Dados Pessoais</ng-template>
-      <app-personal-data [parentForm]="personal"></app-personal-data>
-      <div class="buttons">
-        <button mat-button matStepperNext (click)="nextStepSavePersonal()" [disabled]="form.get('personal')?.invalid">
-          Próximo
-        </button>
-      </div>
-    </mat-step>
+    @for (section of formSchema.sections; track section.id; let idx = $index) {
+      <mat-step [stepControl]="getFormGroup(section.id)">
+        <ng-template matStepLabel>{{ section.title }}</ng-template>
+        
+        <app-dynamic-section 
+          [section]="section" 
+          [form]="getFormGroup(section.id)!"
+          [fieldOptions]="fieldOptions">
+        </app-dynamic-section>
 
-    <mat-step [stepControl]="address">
-      <ng-template matStepLabel>Endereço</ng-template>
-      <app-address-data [parentForm]="address"></app-address-data>
-      <div class="buttons">
-        <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-button matStepperNext (click)="nextStepSaveResidencial()"
-          [disabled]="form.get('address')?.invalid">Próximo</button>
-      </div>
-    </mat-step>
-
-    <mat-step [stepControl]="professional">
-      <ng-template matStepLabel>Profissão</ng-template>
-      <app-professional-data [parentForm]="professional" [profissoes]="profissoes$ | async"></app-professional-data>
-      <div class="buttons">
-        <button mat-button matStepperPrevious>Voltar</button>
-        <button mat-button (click)="finishSaveProfessional(); stepper.next()"
-          [disabled]="form.get('profissional')?.invalid">Finalizar</button>
-      </div>
-    </mat-step>
+        <div class="buttons">
+          @if (idx > 0) {
+            <button mat-button matStepperPrevious>Voltar</button>
+          }
+          
+          @if (idx < formSchema.sections.length - 1) {
+            <button 
+              mat-button 
+              matStepperNext 
+              (click)="saveStep(section.id)"
+              [disabled]="form.get(section.id)?.invalid">
+              Próximo
+            </button>
+          } @else {
+            <button 
+              mat-button 
+              (click)="saveStep(section.id); stepper.next()"
+              [disabled]="form.get(section.id)?.invalid">
+              Finalizar
+            </button>
+          }
+        </div>
+      </mat-step>
+    }
 
     <mat-step>
       <ng-template matStepLabel>Resumo</ng-template>
@@ -42,32 +47,31 @@
 
           <mat-card-content>
             @if (store.data(); as data) {
-            <h4>Dados Pessoais</h4>
-            <mat-list>
-              <mat-list-item><strong>Nome:</strong> {{ data.personal.nome }}</mat-list-item>
-              <mat-list-item><strong>Telefone:</strong> {{ data.personal.telefone }}</mat-list-item>
-              <mat-list-item><strong>Data de nascimento:</strong> {{ data.personal.nascimento | date:'dd/MM/yyyy':'':'pt-BR'}}</mat-list-item>
-              <mat-list-item><strong>CPF:</strong> {{ data.personal.cpf }}</mat-list-item>
-            </mat-list>
-            <mat-divider></mat-divider>
-            <h4>Endereço</h4>
-            <mat-list>
-              <mat-list-item><strong>CEP:</strong> {{ data.address.cep }}</mat-list-item>
-              <mat-list-item><strong>Endereço:</strong> {{ data.address.rua }}</mat-list-item>
-              <mat-list-item><strong>Bairro:</strong> {{ data.address.bairro }}</mat-list-item>
-              <mat-list-item><strong>Cidade:</strong> {{ data.address.cidade }}</mat-list-item>
-              <mat-list-item><strong>Estado:</strong> {{ data.address.estado }}</mat-list-item>
-            </mat-list>
-            <mat-divider></mat-divider>
-            <h4>Profissional</h4>
-            <mat-list>
-              <mat-list-item><strong>Profissão:</strong> {{ data.professional.profissao }}</mat-list-item>
-              <mat-list-item><strong>Empresa:</strong> {{ data.professional.empresa }}</mat-list-item>
-              <mat-list-item><strong>Salário:</strong> {{ data.professional.salario | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</mat-list-item>
-            </mat-list>
-
+              <h4>Dados Pessoais</h4>
+              <mat-list>
+                <mat-list-item><strong>Nome:</strong> {{ data.personal.nome }}</mat-list-item>
+                <mat-list-item><strong>Telefone:</strong> {{ data.personal.telefone }}</mat-list-item>
+                <mat-list-item><strong>Data de nascimento:</strong> {{ data.personal.nascimento | date:'dd/MM/yyyy':'':'pt-BR'}}</mat-list-item>
+                <mat-list-item><strong>CPF:</strong> {{ data.personal.cpf }}</mat-list-item>
+              </mat-list>
+              <mat-divider></mat-divider>
+              <h4>Endereço</h4>
+              <mat-list>
+                <mat-list-item><strong>CEP:</strong> {{ data.address.cep }}</mat-list-item>
+                <mat-list-item><strong>Endereço:</strong> {{ data.address.rua }}</mat-list-item>
+                <mat-list-item><strong>Bairro:</strong> {{ data.address.bairro }}</mat-list-item>
+                <mat-list-item><strong>Cidade:</strong> {{ data.address.cidade }}</mat-list-item>
+                <mat-list-item><strong>Estado:</strong> {{ data.address.estado }}</mat-list-item>
+              </mat-list>
+              <mat-divider></mat-divider>
+              <h4>Profissional</h4>
+              <mat-list>
+                <mat-list-item><strong>Profissão:</strong> {{ data.professional.profissao }}</mat-list-item>
+                <mat-list-item><strong>Empresa:</strong> {{ data.professional.empresa }}</mat-list-item>
+                <mat-list-item><strong>Salário:</strong> {{ data.professional.salario | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</mat-list-item>
+              </mat-list>
             } @else {
-            <p>Nenhum dado preenchido ainda.</p>
+              <p>Nenhum dado preenchido ainda.</p>
             }
           </mat-card-content>
         </mat-card>
