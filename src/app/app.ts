@@ -17,6 +17,7 @@ import { SchemaFormBuilderService } from './core/services/schema-form-builder.se
 import { DynamicSectionComponent } from './shared/components/dynamic-section/dynamic-section.component';
 import { FORM_SCHEMA } from './configs/form-schema.config';
 import { FormSchema } from './shared/models/field-schema.model';
+import { RichTextEditorComponent } from './shared/components/rich-text-editor/rich-text-editor.component';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,8 @@ import { FormSchema } from './shared/models/field-schema.model';
     AsyncPipe,
     DatePipe,
     CurrencyPipe,
-    DynamicSectionComponent
+    DynamicSectionComponent,
+    RichTextEditorComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
